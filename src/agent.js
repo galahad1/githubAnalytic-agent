@@ -25,6 +25,42 @@ class Agent {
     }
     fetchAndProcessPage(targetUrl, this.credentials);
   }
+
+  fetchAndProcessAnOrganisations(organization, done) {
+    const targetUrl = `https://api.github.com/orgs/${organization}`;
+    let result = '';
+    function fetchAndProcessPage(pageUrl, credentials) {
+      request
+        .get(pageUrl)
+        .auth(credentials.username, credentials.token)
+        .end((err, res) => {
+          result = res.body;
+          console.log(result);
+          done(null, result);
+        });
+    }
+    fetchAndProcessPage(targetUrl, this.credentials);
+  }
+
+  fetchAndProcessReposOfAnOrganization(organization, allReposAreAvailable) {
+    const targetUrl = `https://api.github.com/orgs/${organization}/repos`;
+    let repos = [];
+    function fetchAndProcessPage(pageUrl, credentials) {
+      request
+        .get(pageUrl)
+        .auth(credentials.username, credentials.token)
+        .end((err, res) => {
+          repos = repos.concat(res.body);
+          if (res.links.next) {
+            fetchAndProcessPage(res.links.next, credentials);
+          } else {
+            console.log(repos);
+            allReposAreAvailable(null, repos);
+          }
+        });
+    }
+    fetchAndProcessPage(targetUrl, this.credentials);
+  }
 }
 
 module.exports = Agent;
