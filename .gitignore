@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# credential
+github-credentials.json
+
+#idea
+.idea
