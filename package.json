@@ -1,0 +1,26 @@
+{
+  "name": "githubanalytic-agent",
+  "version": "1.0.0",
+  "description": "An agent to get data from github and send them to a server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/galahad1/githubAnalytic-agent.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/galahad1/githubAnalytic-agent/issues"
+  },
+  "homepage": "https://github.com/galahad1/githubAnalytic-agent#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.8.0",
+    "eslint-config-airbnb-base": "^12.0.1",
+    "eslint-plugin-import": "^2.7.0",
+    "mocha": "^3.5.3"
+  }
+}
