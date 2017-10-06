@@ -1,5 +1,10 @@
 const request = require('superagent');
 
+// TODO nombre de personne dans une organisation
+// TODO nombre repos d'une orga
+// TODO description
+// TODO creation date
+
 class Agent {
   constructor(credentials) {
     this.credentials = credentials;
@@ -50,7 +55,16 @@ class Agent {
         .get(pageUrl)
         .auth(credentials.username, credentials.token)
         .end((err, res) => {
-          repos = repos.concat(res.body);
+          const repo = res.body.map(repository => ({
+            name: repository.name,
+            html_url: repository.html_url,
+            id: repository.id,
+            languages_url: repository.languages_url,
+            created_at: repository.created_at,
+            commit_url: repository.commit_url,
+            pulls_url: repository.pulls_url,
+          }));
+          repos = repos.concat(repo);
           if (res.links.next) {
             fetchAndProcessPage(res.links.next, credentials);
           } else {
