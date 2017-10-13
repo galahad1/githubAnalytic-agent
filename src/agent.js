@@ -1,47 +1,65 @@
 const request = require('superagent');
+const Throttle = require('superagent-throttle');
 
-// TODO nombre de personne dans une organisation
-// TODO nombre repos d'une orga
-// TODO description
-// TODO creation date
 
+// todo fonction qui attend que les deux fonctions de fetch soient finie pour regrouper les information et faire le post
+
+/**
+ * Implements function to get data from github
+ * @author Tano Iannetta and Loan Lassalle
+ */
 class Agent {
   constructor(credentials) {
     this.credentials = credentials;
+    this.repos = [];
   }
+  fetchAndProcessLanguagesOfRepos(repos, allLanguagesAvailable) {
+    const throttle = new Throttle({
+      active: true,
+      rate: 20,
+      ratePer: 1000,
+      concurrent: 10,
+    });
+    let currentNbrOfRequest = 0;
+    const nbrOfRepos = repos.length;
+    let i = 0;
+    function notify(repositories) {
+      currentNbrOfRequest += 1;
+      if (currentNbrOfRequest === nbrOfRepos) {
+        allLanguagesAvailable(null, repositories);
+      }
+    }
+    const repositories = [];
+    for (; i < nbrOfRepos; i += 1) {
+      const repo = repos[i];
+      const targetUrl = repo.languages_url;
 
-  fetchAndProcessAllOrganizations(allOrganizationsAvailable) {
-    const targetUrl = 'https://api.github.com/organizations';
-    let organizations = [];
-    let count = 0;
-    function fetchAndProcessPage(pageUrl, credentials) {
       request
-        .get(pageUrl)
-        .auth(credentials.username, credentials.token)
+        .get(targetUrl)
+        .use(throttle.plugin())
+        .auth(this.credentials.username, this.credentials.token)
         .end((err, res) => {
-          organizations = organizations.concat(res.body);
-          if (res.links.next && count < 5) {
-            fetchAndProcessPage(res.links.next, credentials);
-            count += 1;
-          } else {
-            allOrganizationsAvailable(null, organizations);
-          }
+          repo.languages = res.body;
+          repositories.push(repo);
+          notify(repositories);
         });
     }
-    fetchAndProcessPage(targetUrl, this.credentials);
   }
-
   fetchAndProcessAnOrganisations(organization, done) {
     const targetUrl = `https://api.github.com/orgs/${organization}`;
-    let result = '';
     function fetchAndProcessPage(pageUrl, credentials) {
       request
         .get(pageUrl)
         .auth(credentials.username, credentials.token)
         .end((err, res) => {
-          result = res.body;
-          console.log(result);
-          done(null, result);
+          const orga = {
+            name: res.body.name,
+            url: res.body.url,
+            description: res.body.description,
+            created_at: res.body.created_at,
+            collaborators: res.body.collaborators,
+          };
+          done(null, orga);
         });
     }
     fetchAndProcessPage(targetUrl, this.credentials);
@@ -61,19 +79,19 @@ class Agent {
             id: repository.id,
             languages_url: repository.languages_url,
             created_at: repository.created_at,
-            commit_url: repository.commit_url,
-            pulls_url: repository.pulls_url,
           }));
           repos = repos.concat(repo);
           if (res.links.next) {
-            fetchAndProcessPage(res.links.next, credentials);
+            fetchAndProcessPage.bind(this)(res.links.next, credentials);
           } else {
-            console.log(repos);
-            allReposAreAvailable(null, repos);
+            this.fetchAndProcessLanguagesOfRepos(repos, (error, languages) => {
+              this.repos = languages;
+              allReposAreAvailable(error, this.repos);
+            });
           }
         });
     }
-    fetchAndProcessPage(targetUrl, this.credentials);
+    fetchAndProcessPage.bind(this)(targetUrl, this.credentials);
   }
 }
 

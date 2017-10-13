@@ -24,6 +24,7 @@
     "mocha": "^3.5.3"
   },
   "dependencies": {
-    "superagent": "^3.6.2"
+    "superagent": "^3.6.2",
+    "superagent-throttle": "^0.2.5"
   }
 }
