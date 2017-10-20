@@ -21,11 +21,15 @@ class Agent {
   fetchAndProcessOrganizationAndRepos(organization, allDataAvailable) {
     this.fetchAndProcessAnOrganisations(organization, (err, orga) => {
       this.organization = orga;
-      this.fetchAndProcessReposOfAnOrganization(orga.login, (err2, repos) => {
-        this.repos = repos;
-        this.organization.repos = this.repos;
-        allDataAvailable(null, this.organization);
-      });
+      if (err === 'Not Found' || !(err === null) || orga.login === undefined) {
+        allDataAvailable(err, null);
+      } else {
+        this.fetchAndProcessReposOfAnOrganization(orga.login, (err2, repos) => {
+          this.repos = repos;
+          this.organization.repos = this.repos;
+          allDataAvailable(null, this.organization);
+        });
+      }
     });
   }
 
@@ -93,6 +97,9 @@ class Agent {
         .auth(credentials.username, credentials.token)
         // get some data of an organization
         .end((err, res) => {
+          if (!(res.body.message === null) && res.body.message === 'Not Found') {
+            done('Not Found', null);
+          }
           const orga = {
             login: res.body.login,
             name: res.body.name,

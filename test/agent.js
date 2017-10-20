@@ -33,7 +33,7 @@ describe('agent', () => {
 
   it('should fetch data of an organization and store them on GitHub', (done) => {
     const agent = new Agent(credentials);
-    const orga = 'QubesOS';
+    const orga = 'sasa';
     agent.fetchAndProcessOrganizationAndRepos(orga, (err, data) => {
       should.not.exist(err);
       should.exist(data);
