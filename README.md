@@ -41,7 +41,7 @@ however you can test this part separately
 You can host the agent locally.
 Here again you will need the github-credentials.json file with your username and token
 
-`$ node src/index.js` to run the application
+`$ node src/index.html` to run the application
 
 This application is a small server that listen on port `7410`. The server is waiting a POST request with the organization you want to fetch data about and the repository where to store the data. Here's an example:
 
