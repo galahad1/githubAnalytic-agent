@@ -53,6 +53,30 @@ The server will respond to the request with:
 * `/invalid` if the request didn't worked properly (the number of requests allowed by hour of the token is exceed for example).
 
 
-### Deplyement on Heroku
+### Preparation of Deployment on Heroku
 
-    Prerequies: Heroku installed and initialized with your account
+__Prerequisites:__
+* Heroku installed and initialized with your account
+* Logged in with Heroku
+
+#### Prepare the application
+
+`$ git clone https://github.com/galahad1/githubAnalytic-agent.git`
+
+`$ cd githubAnalytic-agent`
+
+### Deployment
+
+`$ heroku create` to create the heroku application
+
+>You have to set environement variables with your credentials
+
+>`$ heroku config:set GITHUB_USERNAME=yourUsername`
+
+>`$ heroku config:set GITHUB_TOKEN=yourToken`
+
+
+Now deploy the app
+$ git push heroku master
+
+heroku run agent
