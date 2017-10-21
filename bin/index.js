@@ -27,10 +27,13 @@ app.post('/agent', (request, response) => {
   agent.fetchAndProcessOrganizationAndRepos(organization, (err, data) => {
     if (!(err === null)) {
       response.end(err);
+      // couldn't make requests
+    } else if (err === null && data === null) {
+      response.end('/invalid');
     } else {
       const storage = new Storage(credentials.username, credentials.token, targetRepo);
       storage.publish('my-data-file.json', JSON.stringify(data), 'new version of the file', () => {
-        response.end('Data ready');
+        response.end('/ready');
       });
     }
   });

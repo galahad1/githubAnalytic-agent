@@ -21,8 +21,12 @@ class Agent {
   fetchAndProcessOrganizationAndRepos(organization, allDataAvailable) {
     this.fetchAndProcessAnOrganisations(organization, (err, orga) => {
       this.organization = orga;
-      if (err === 'Not Found' || !(err === null) || orga.login === undefined) {
-        allDataAvailable(err, null);
+      if (!(err === null) || orga.login === undefined) {
+        if (err !== 'Not Found') {
+          allDataAvailable(err, null); // couldn't make requests
+        } else {
+          allDataAvailable('/notFound', null); // not found
+        }
       } else {
         this.fetchAndProcessReposOfAnOrganization(orga.login, (err2, repos) => {
           this.repos = repos;
