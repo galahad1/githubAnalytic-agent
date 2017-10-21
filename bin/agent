@@ -43,6 +43,6 @@ app.post('/agent', (request, response) => {
   });
 });
 
-app.listen(7410, () => {
+app.listen(process.env.PORT || 7410, () => {
   console.log('Started on PORT 7410');
 });
