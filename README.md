@@ -43,7 +43,7 @@ Here again you will need the github-credentials.json file with your username and
 
 `$ node src/index.html` to run the application
 
-This application is a small server that listen on port `7410`. The server is waiting a POST request with the organization you want to fetch data about and the repository where to store the data. Here's an example:
+This application is a small server that listen on port `7410` (if deployed locally). The server is waiting a GET request with the organization you want to fetch data about and the repository where to store the data. Here's an example:
 
 `localhost:7410/agent?organization=QubesOS&repository=githubAnalytic-agent`
 
@@ -79,4 +79,10 @@ __Prerequisites:__
 Now deploy the app
 $ git push heroku master
 
-heroku run agent
+You can now go to the application web page
+$ heroku open
+
+You will land on the index page that give you indications on how to use the agent.
+To activate the agent make a GET request on the /agent page
+
+`https://infinite-earth-87590.herokuapp.com/agent?organization=QubesOs&repository=githubAnalytic-agent`

@@ -15,7 +15,7 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const credentials = {"username": process.env.GITHUB_USERNAME, "token": process.env.GITHUB_TOKEN};
+const credentials = { username: process.env.GITHUB_USERNAME, token: process.env.GITHUB_TOKEN };
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -28,19 +28,23 @@ app.get('/agent', (request, response) => {
   const agent = new Agent(credentials);
   const targetRepo = request.query.repository;
   const organization = request.query.organization;
-  agent.fetchAndProcessOrganizationAndRepos(organization, (err, data) => {
-    if (!(err === null)) {
-      response.end(err);
-      // couldn't make requests
-    } else if (err === null && data === null) {
-      response.end('/invalid');
-    } else {
-      const storage = new Storage(credentials.username, credentials.token, targetRepo);
-      storage.publish('my-data-file.json', JSON.stringify(data), 'new version of the file', () => {
-        response.end('/ready');
-      });
-    }
-  });
+  if (targetRepo !== undefined && organization !== undefined) {
+    agent.fetchAndProcessOrganizationAndRepos(organization, (err, data) => {
+      if (!(err === null)) {
+        response.end(err);
+        // couldn't make requests
+      } else if (err === null && data === null) {
+        response.end('/invalid');
+      } else {
+        const storage = new Storage(credentials.username, credentials.token, targetRepo);
+        storage.publish('my-data-file.json', JSON.stringify(data), 'new version of the file', () => {
+          response.end('/ready');
+        });
+      }
+    });
+  } else {
+    response.end('/invalid');
+  }
 });
 
 app.listen(process.env.PORT || 7410, () => {
