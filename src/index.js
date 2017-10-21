@@ -1,7 +1,8 @@
 /**
  * This simple server listen on port 7410 to get a POST request to use the Agent and get data about
  * a given organization. The agent will store data in the given target repository.
- * The server need to have username and token in order to have right to write data on a GitHub repository
+ * The server need to have username and token in order to have right to write data
+ * on a GitHub repository
  */
 const Agent = require('./agent.js');
 const Storage = require('./storage');

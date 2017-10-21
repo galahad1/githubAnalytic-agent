@@ -1,9 +1,9 @@
-# TWEB :: GitHub Analytics :: Organisation
+# TWEB :: GitHub Analytics :: Organization
 Authors: Tano Iannetta & Loan Lassalle
 ***
 
 ## Architecture
-The GitHub analytics projects is base on a client and a agent side.
+The GitHub analytics projects is based on a client and a agent side.
 
 ### Client
 The client side of the project is hosted directly on github via GitHub Pages. You can consult the [website](https://lassalleloan.github.io/githubAnalytic-static/ "GitHub Analytics Static").
@@ -23,7 +23,7 @@ First of all you have to create a file named github-credentials.json that contai
     		"token" : "yourToken"
     }
 
-You will aslo need to change the target repository of the data storage. In the test/storage.js and test/agents.js files you want to change the value of `const repo = 'githubAnalytic-agent';` with one of your repository.
+You will also need to change the target repository of the data storage. In the test/storage.js and test/agents.js files you want to change the value of `const repo = 'githubAnalytic-agent';` with one of your repository.
 
 You can now run the following commands to run the tests of the agent
 
@@ -36,12 +36,12 @@ however you can test this part separately
 
 `$ node_modules/mocha/bin/mocha --timeout 30000 test/storage.js` to execute the test of the storage
 
-### Local host of the agent
+### Local hosting of the agent
 
 You can host the agent locally.
 Here again you will need the github-credentials.json file with your username and token
 
-`$ node src/index.html` to run the application
+`$ node src/index.js` to run the application
 
 This application is a small server that listen on port `7410` (if deployed locally). The server is waiting a GET request with the organization you want to fetch data about and the repository where to store the data. Here's an example:
 
@@ -49,7 +49,7 @@ This application is a small server that listen on port `7410` (if deployed local
 
 The server will respond to the request with:
 * `/ready` if the data were stored with success
-* `/notFound` if the organization does not existe
+* `/notFound` if the organization does not exist
 * `/invalid` if the request didn't worked properly (the number of requests allowed by hour of the token is exceed for example).
 
 
@@ -69,18 +69,19 @@ __Prerequisites:__
 
 `$ heroku create` to create the heroku application
 
->You have to set environement variables with your credentials
+>You have to set environment variables with your credentials
 
 >`$ heroku config:set GITHUB_USERNAME=yourUsername`
 
 >`$ heroku config:set GITHUB_TOKEN=yourToken`
 
-
 Now deploy the app
-$ git push heroku master
+
+`$ git push heroku master`
 
 You can now go to the application web page
-$ heroku open
+
+`$ heroku open`
 
 You will land on the index page that give you indications on how to use the agent.
 To activate the agent make a GET request on the /agent page
