@@ -71,7 +71,10 @@ class Agent {
         .use(throttle.plugin())
         .auth(this.credentials.username, this.credentials.token)
         .end((err, res) => {
-          repo.languages = res.body; // languages in the repo
+          const objLanguages = res.body;
+          // convert languages in a tab of object
+          repo.languages = Object.keys(objLanguages).map(key =>
+            ({ name: key, nbrBytes: objLanguages[key] }));
           repositories.push(repo);
           notify(repositories);
         });
