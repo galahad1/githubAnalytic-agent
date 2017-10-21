@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/index.html`);
 });
 
-app.post('/agent', (request, response) => {
+app.get('/agent', (request, response) => {
   const agent = new Agent(credentials);
   const targetRepo = request.query.repository;
   const organization = request.query.organization;
