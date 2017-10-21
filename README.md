@@ -12,6 +12,29 @@ The client side of the project is hosted directly on github via GitHub Pages. Yo
 In the background, an agent working to publish updated data on GitHub for the client. The agent's code is available [here](https://github.com/galahad1/githubAnalytic-agent "GitHub Analytics Agent").
 The agent is deployed in the cloud on [Heroku](https://www.heroku.com/ "Heroku Website"). Read the repo's [README](https://github.com/heroku/heroku-repo "Heroku Repo") to know more about it.
 
+### Data fetched
+
+The agent will look for several information about an organization and its repositories.
+
+We have for an organization :
+* Login
+* Name
+* Url
+* Description
+* Date of creation
+* Repositories
+
+For the repositories we will store few date as well:
+* Name
+* Url
+* Id
+* Languages's Url
+* Date of creation
+* Languages used
+
+The data fetched will be displayed on the client-side [application](https://lassalleloan.github.io/githubAnalytic-static/ "GitHub Analytics Static").
+
+
 ### Local test of the Agent
 
 You can test the agent locally.
