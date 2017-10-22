@@ -8,14 +8,15 @@ const Agent = require('./agent.js');
 const Storage = require('./storage');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 
 const credentials = require('../github-credentials.json');
 
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/index.html`);
