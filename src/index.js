@@ -35,7 +35,7 @@ app.get('/agent', (request, response) => {
         response.end('/invalid');
       } else {
         const storage = new Storage(credentials.username, credentials.token, targetRepo);
-        storage.publish('doc/data/organization.json', JSON.stringify(data), 'new version of the file', () => {
+        storage.publish('docs/data/organization.json', JSON.stringify(data), 'new version of the file', () => {
           response.end('/ready');
         });
       }
